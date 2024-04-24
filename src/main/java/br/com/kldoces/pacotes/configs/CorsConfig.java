@@ -1,4 +1,4 @@
-package br.com.kldoces.pacotes;
+package br.com.kldoces.pacotes.configs;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

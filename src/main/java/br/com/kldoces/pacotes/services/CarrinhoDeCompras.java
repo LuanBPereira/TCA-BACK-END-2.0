@@ -2,12 +2,14 @@ package br.com.kldoces.pacotes.services;
 
 import br.com.kldoces.pacotes.dao.ProdutosDAO;
 import br.com.kldoces.pacotes.models.Produtos;
+import org.springframework.stereotype.Service;
 
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CarrinhoDeCompras implements ICarrinhoDeCompras {
+@Service
+public class CarrinhoDeCompras {
     private DecimalFormat df = new DecimalFormat("0.00");
     private List<ItemDeCompra> itens;
 
@@ -20,11 +22,17 @@ public class CarrinhoDeCompras implements ICarrinhoDeCompras {
     }
 
     public void adicionarItem(Produtos produto, int quantidade) {
+        // Verifica se o produto é nulo
+        if (produto == null) {
+            System.out.println("O produto é nulo. Não é possível adicionar ao carrinho.");
+            return;
+        }
+
         // Verifica se o produto já está no carrinho
         for (ItemDeCompra item : itens) {
             if (item.getProduto().getCodigoP().equals(produto.getCodigoP())) {
                 item.setQuantidade(item.getQuantidade() + quantidade);
-                return;
+                return; // Sai do método após atualizar a quantidade
             }
         }
         // Se o produto não está no carrinho, adiciona um novo item
