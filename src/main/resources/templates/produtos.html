@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista de Produtos</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+        .container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1, h2 {
+            color: #333;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .add-to-cart {
+            padding: 8px 12px;
+            background-color: #4caf50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .add-to-cart:hover {
+            background-color: #45a049;
+        }
+        .cart-list {
+            list-style-type: none;
+            padding: 0;
+        }
+        .total-price {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Lista de Produtos</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>Código</th>
+                    <th>Nome</th>
+                    <th>Preço</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody id="product-list">
+                <!-- Os produtos serão adicionados aqui dinamicamente -->
+            </tbody>
+        </table>
+
+        <div>
+            <h2>Carrinho de Compras</h2>
+            <ul class="cart-list">
+                <!-- O carrinho de compras será exibido aqui -->
+            </ul>
+            <p>Total: R$ <span class="total-price">0.00</span></p>
+        </div>
+    </div>
+    <script>
+        // Função para buscar e exibir os produtos
+        function fetchProducts() {
+            fetch('http://localhost:8080/produtos')
+                .then(response => response.json())
+                .then(produtos => {
+                    const productList = document.getElementById('product-list');
+                    produtos.forEach(produto => {
+                        const row = document.createElement('tr');
+                        row.innerHTML = `
+                            <td>${produto.codigoP}</td>
+                            <td>${produto.nome}</td>
+                            <td>R$ ${produto.preco.toFixed(2)}</td>
+                            <td><button class="add-to-cart" data-name="${produto.nome}" data-price="${produto.preco}">Adicionar ao Carrinho</button></td>
+                        `;
+                        productList.appendChild(row);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao obter a lista de produtos:', error);
+                });
+        }
+
+        // Chamada da função para buscar os produtos ao carregar a página
+        fetchProducts();
+    </script>
+</body>
+</html>
