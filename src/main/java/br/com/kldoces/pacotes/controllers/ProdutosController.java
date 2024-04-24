@@ -15,21 +15,10 @@ public class ProdutosController {
     @Autowired
     private ProdutosRepository pr;
 
-    @GetMapping("/paginaProdutos")
-    public ModelAndView index(){
-        ModelAndView modelAndView = new ModelAndView("index");
-        Iterable<Produtos> produtos = pr.findAll();
-        modelAndView.addObject("produtos", produtos);
-        return modelAndView;
-
-    }
-
     @GetMapping("/produtos")
     public List<Produtos> getProdutosList(){
-       System.out.println("\nProdutos enviados para o localhost:8080/produtos");
-       return pr.findAll();
-
-   }
-
+        System.out.println("\nProdutos enviados para o localhost:8080/produtos");
+        return pr.findAll();
+    }
 
 }
