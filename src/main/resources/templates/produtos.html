@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +11,7 @@
             margin: 0;
             padding: 0;
         }
+
         .container {
             max-width: 800px;
             margin: 20px auto;
@@ -18,22 +20,29 @@
             border-radius: 8px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        h1, h2 {
+
+        h1,
+        h2 {
             color: #333;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 20px;
         }
-        th, td {
+
+        th,
+        td {
             padding: 10px;
             text-align: left;
             border-bottom: 1px solid #ddd;
         }
+
         th {
             background-color: #f2f2f2;
         }
+
         .add-to-cart {
             padding: 8px 12px;
             background-color: #4caf50;
@@ -42,18 +51,43 @@
             border-radius: 4px;
             cursor: pointer;
         }
+
         .add-to-cart:hover {
             background-color: #45a049;
         }
+
         .cart-list {
             list-style-type: none;
             padding: 0;
         }
+
         .total-price {
             font-weight: bold;
         }
+
+        /* Estilo para o botão de limpar carrinho */
+        #limpar-carrinho {
+            padding: 8px 12px;
+            background-color: #f44336;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+
+        #limpar-carrinho:hover {
+            background-color: #d32f2f;
+        }
+
+        /* Estilo para o título do carrinho */
+        h2.cart-title {
+            color: #333;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>Lista de Produtos</h1>
@@ -72,11 +106,12 @@
         </table>
 
         <div>
-            <h2>Carrinho de Compras</h2>
+            <h2 class="cart-title">Carrinho de Compras</h2>
             <ul class="cart-list">
                 <!-- O carrinho de compras será exibido aqui -->
             </ul>
             <p>Total: R$ <span class="total-price">0.00</span></p>
+            <button id="limpar-carrinho">Limpar Carrinho</button>
         </div>
     </div>
     <script>
@@ -92,7 +127,7 @@
                             <td>${produto.codigoP}</td>
                             <td>${produto.nome}</td>
                             <td>R$ ${produto.preco.toFixed(2)}</td>
-                            <td><button class="add-to-cart" data-name="${produto.nome}" data-price="${produto.preco}">Adicionar ao Carrinho</button></td>
+                            <button class="add-to-cart" data-id="${produto.codigoP}" data-name="${produto.nome}" data-price="${produto.preco}">Adicionar ao Carrinho</button>
                         `;
                         productList.appendChild(row);
                     });
@@ -102,8 +137,88 @@
                 });
         }
 
-        // Chamada da função para buscar os produtos ao carregar a página
-        fetchProducts();
+        // Função para adicionar um item ao carrinho
+        function adicionarItemCarrinho(id, nome, preco) {
+            fetch('http://localhost:8080/carrinho/adicionar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    produto: {
+                        codigoP: id,
+                        nome: nome,
+                        preco: preco
+                    },
+                    quantidade: 1
+                })
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao adicionar item ao carrinho');
+                    }
+                    console.log('Item adicionado ao carrinho com sucesso!');
+                    // Atualizar a lista de itens do carrinho após adicionar ao carrinho
+                    fetchCartItems();
+                })
+                .catch(error => {
+                    console.error('Erro ao adicionar item ao carrinho:', error);
+                });
+        }
+
+        // Evento de clique para adicionar um item ao carrinho
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('add-to-cart')) {
+                const id = event.target.dataset.id;
+                const nome = event.target.dataset.name;
+                const preco = event.target.dataset.price;
+                adicionarItemCarrinho(id, nome, preco);
+            }
+        });
+
+        function fetchCartItems() {
+            fetch('http://localhost:8080/carrinho/listar')
+                .then(response => response.json())
+                .then(itens => {
+                    const cartList = document.querySelector('.cart-list');
+                    cartList.innerHTML = ''; // Limpar a lista de itens do carrinho antes de adicionar os novos itens
+                    itens.forEach(item => {
+                        const listItem = document.createElement('li');
+                        listItem.textContent = `${item.produto.nome} - Quantidade: ${item.quantidade}`;
+                        cartList.appendChild(listItem);
+                    });
+                })
+                .catch(error => {
+                    console.error('Erro ao obter itens do carrinho:', error);
+                });
+        }
+        function limparCarrinho() {
+            fetch('http://localhost:8080/carrinho/limpar', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Erro ao limpar o carrinho');
+                    }
+                    console.log('Carrinho limpo com sucesso!');
+                    // Atualizar a lista de itens do carrinho após limpar
+                    fetchCartItems();
+                })
+                .catch(error => {
+                    console.error('Erro ao limpar o carrinho:', error);
+                });
+        }
+
+        // Evento de clique para limpar o carrinho
+        document.getElementById('limpar-carrinho').addEventListener('click', limparCarrinho);
+        // Chamada da função para buscar os itens do carrinho ao carregar a página
+        fetchCartItems();
+        fetchProducts()
+
     </script>
 </body>
+
 </html>
