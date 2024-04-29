@@ -85,6 +85,23 @@
             color: #333;
             margin-top: 20px;
         }
+
+        p {
+            margin: 6px;
+        }
+
+        #finalizar-compra {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            padding: 8px 12px;
+            cursor: pointer;
+        }
+
+        #finalizar-compra:hover {
+            background-color: #0056b3;
+        }
     </style>
 </head>
 
@@ -110,119 +127,16 @@
             <ul class="cart-list">
                 <!-- O carrinho de compras será exibido aqui -->
             </ul>
-            <p>Total: R$ <span id="total-price">0.00</span></p>
+            <p>Subtotal: <span id="subtotal"></span></p>
+            <p>Taxa de Entrega: <span id="delivery-fee"></span></p>
+            <p>Total: <span id="total-price">0.00</span></p>
             <button id="limpar-carrinho">Limpar Carrinho</button>
+            <button id="finalizar-compra" onclick="redirecionarParaPagamento()">Finalizar Compra</button>
         </div>
     </div>
-    <script>
-        // Função para buscar e exibir os produtos
-        function fetchProducts() {
-            fetch('http://localhost:8080/produtos')
-                .then(response => response.json())
-                .then(produtos => {
-                    const productList = document.getElementById('product-list');
-                    produtos.forEach(produto => {
-                        const row = document.createElement('tr');
-                        row.innerHTML = `
-                            <td>${produto.codigoP}</td>
-                            <td>${produto.nome}</td>
-                            <td>R$ ${produto.preco.toFixed(2)}</td>
-                            <button class="add-to-cart" data-id="${produto.codigoP}" data-name="${produto.nome}" data-price="${produto.preco}">Adicionar ao Carrinho</button>
-                        `;
-                        productList.appendChild(row);
-                    });
-                })
-                .catch(error => {
-                    console.error('Erro ao obter a lista de produtos:', error);
-                });
-        }
 
-        // Função para adicionar um item ao carrinho
-        function adicionarItemCarrinho(id, nome, preco) {
-            fetch('http://localhost:8080/carrinho/adicionar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    produto: {
-                        codigoP: id,
-                        nome: nome,
-                        preco: preco
-                    },
-                    quantidade: 1
-                })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao adicionar item ao carrinho');
-                    }
-                    console.log('Item adicionado ao carrinho com sucesso!');
-                    // Atualizar a lista de itens do carrinho após adicionar ao carrinho
-                    fetchCartItems();
-                })
-                .catch(error => {
-                    console.error('Erro ao adicionar item ao carrinho:', error);
-                });
-        }
 
-        // Evento de clique para adicionar um item ao carrinho
-        document.addEventListener('click', function (event) {
-            if (event.target.classList.contains('add-to-cart')) {
-                const id = event.target.dataset.id;
-                const nome = event.target.dataset.name;
-                const preco = event.target.dataset.price;
-                adicionarItemCarrinho(id, nome, preco);
-            }
-        });
-
-        function fetchCartItems() {
-            fetch('http://localhost:8080/carrinho/listar')
-                .then(response => response.json())
-                .then(itens => {
-                    const cartList = document.querySelector('.cart-list');
-                    const totalPriceElement = document.getElementById('total-price');
-                    cartList.innerHTML = '';
-                    let totalPrice = 0;
-                    itens.forEach(item => {
-                        const listItem = document.createElement('li');
-                        listItem.textContent = `${item.produto.nome} - Quantidade: ${item.quantidade}`;
-                        cartList.appendChild(listItem);
-                        totalPrice += item.produto.preco * item.quantidade;
-                    });
-                    totalPriceElement.textContent = totalPrice.toFixed(2);
-                })
-                .catch(error => {
-                    console.error('Erro ao obter itens do carrinho:', error);
-                });
-        }
-        function limparCarrinho() {
-            fetch('http://localhost:8080/carrinho/limpar', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Erro ao limpar o carrinho');
-                    }
-                    console.log('Carrinho limpo com sucesso!');
-                    // Atualizar a lista de itens do carrinho após limpar
-                    fetchCartItems();
-                })
-                .catch(error => {
-                    console.error('Erro ao limpar o carrinho:', error);
-                });
-        }
-
-        // Evento de clique para limpar o carrinho
-        document.getElementById('limpar-carrinho').addEventListener('click', limparCarrinho);
-        // Chamada da função para buscar os itens do carrinho ao carregar a página
-        fetchCartItems();
-        fetchProducts()
-
-    </script>
+    <script src="carrinho.js"></script>
 </body>
 
 </html>

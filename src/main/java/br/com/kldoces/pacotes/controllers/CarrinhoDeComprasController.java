@@ -5,7 +5,9 @@ import br.com.kldoces.pacotes.services.ItemDeCompra;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("carrinho")
@@ -29,9 +31,11 @@ public class CarrinhoDeComprasController {
     }
 
     @PostMapping("/valorTotal")
-    public double calculoTotal(){
+    public Map<String, Double> calculoTotal(){
         double valorTotal = cc.calcularTotal();
-        return valorTotal;
+        Map<String, Double> response = new HashMap<>();
+        response.put("total", valorTotal);
+        return response;
     }
 
     @GetMapping("/listar")

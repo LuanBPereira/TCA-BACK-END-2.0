@@ -86,11 +86,12 @@ public class CarrinhoDeCompras {
     }
 
     public double calcularTotal() {
-        double total = 0.0;
-        for (ItemDeCompra item : itens) {
-            total += item.getSubtotal();
-        }
-        return total;
+        double subtotal = this.itens.stream()
+                .mapToDouble(item -> item.getSubtotal())
+                .sum();
+        // Taxa de entrega
+        double taxaEntrega = 7.0;
+        return subtotal + taxaEntrega;
     }
 
     public void limparCarrinho(){
