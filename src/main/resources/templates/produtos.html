@@ -110,7 +110,7 @@
             <ul class="cart-list">
                 <!-- O carrinho de compras será exibido aqui -->
             </ul>
-            <p>Total: R$ <span class="total-price">0.00</span></p>
+            <p>Total: R$ <span id="total-price">0.00</span></p>
             <button id="limpar-carrinho">Limpar Carrinho</button>
         </div>
     </div>
@@ -181,12 +181,16 @@
                 .then(response => response.json())
                 .then(itens => {
                     const cartList = document.querySelector('.cart-list');
-                    cartList.innerHTML = ''; // Limpar a lista de itens do carrinho antes de adicionar os novos itens
+                    const totalPriceElement = document.getElementById('total-price');
+                    cartList.innerHTML = '';
+                    let totalPrice = 0;
                     itens.forEach(item => {
                         const listItem = document.createElement('li');
                         listItem.textContent = `${item.produto.nome} - Quantidade: ${item.quantidade}`;
                         cartList.appendChild(listItem);
+                        totalPrice += item.produto.preco * item.quantidade;
                     });
+                    totalPriceElement.textContent = totalPrice.toFixed(2);
                 })
                 .catch(error => {
                     console.error('Erro ao obter itens do carrinho:', error);
