@@ -14,7 +14,7 @@ function realizarPagamento(formaDePagamento) {
             alert(`Pagamento realizado via *${formaDePagamento}* com sucesso!`);
 
             // Redirecionar o usuário para a página de produtos após o pagamento
-            window.location.href = 'produtos.html';
+            window.location.href = 'carrinho.html';
         })
         .catch(error => {
             console.error('Erro ao realizar o pagamento:', error);
