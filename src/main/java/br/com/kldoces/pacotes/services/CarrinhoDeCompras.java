@@ -17,10 +17,12 @@ public class CarrinhoDeCompras {
         this.itens = new ArrayList<>();
     }
 
+    // tá sendo usada
     public List<ItemDeCompra> getItens() {
         return itens;
     }
 
+    // tá sendo usada
     public void adicionarItem(Produtos produto, int quantidade) {
         // Verifica se o produto é nulo
         if (produto == null) {
@@ -85,6 +87,7 @@ public class CarrinhoDeCompras {
         }
     }
 
+    // tá sendo usada
     public double calcularTotal() {
         double subtotal = this.itens.stream()
                 .mapToDouble(item -> item.getSubtotal())
@@ -94,6 +97,7 @@ public class CarrinhoDeCompras {
         return subtotal + taxaEntrega;
     }
 
+    // tá sendo usada
     public void limparCarrinho(){
         itens.clear();
     }
