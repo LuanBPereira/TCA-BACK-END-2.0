@@ -5,19 +5,65 @@ body {
     background-color: #f4f4f4;
 }
 
-h1 {
-    text-align: center;
-    margin-top: 20px;
-    color: #333;
+.container {
+    max-width: 800px;
+    margin: 20px auto;
+    display: flex;
+    justify-content: space-between;
 }
 
-.container {
-    max-width: 600px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
+.order-details {
+    flex-grow: 1;
+    margin-right: 20px;
+    background-color: #86868657;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+.payment-options {
+    width: 250px;
+    background-color: #86868657;
+    /* Cor de fundo da caixa de opções de pagamento */
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+}
+
+h1 {
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.order-details-title {
+    color: #333;
+    margin-bottom: 20px;
+    border-bottom: 2px solid #4caf50;
+    /* Linha verde no título */
+    padding-bottom: 10px;
+}
+
+ul {
+    padding: 0;
+    margin-bottom: 20px;
+}
+
+ul li {
+    margin-bottom: 5px;
+    padding: 10px;
+    background-color: rgb(228, 228, 228);
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    /* Sombra nos itens */
+    list-style: none;
+}
+
+ul li:last-child {
+    margin-bottom: 0;
+}
+
+span {
+    font-weight: bold;
 }
 
 button {
@@ -34,5 +80,5 @@ button {
 }
 
 button:hover {
-    background-color: #45a049;
+    background-color: #3f943f;
 }

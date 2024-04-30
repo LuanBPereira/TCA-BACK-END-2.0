@@ -30,11 +30,13 @@
             <ul class="cart-list">
                 <!-- O carrinho de compras será exibido aqui -->
             </ul>
-            <p>Subtotal: <span id="subtotal"></span></p>
-            <p>Taxa de Entrega: <span id="delivery-fee"></span></p>
-            <p>Total: <span id="total-price">0.00</span></p>
-            <button id="limpar-carrinho">Limpar Carrinho</button>
-            <button id="finalizar-compra" onclick="redirecionarParaPagamento()">Finalizar Compra</button>
+            <div class="cart-summary">
+                <p>Subtotal: <span id="subtotal"></span></p>
+                <p>Taxa de Entrega: <span id="delivery-fee"></span></p>
+                <p>Total: <span id="total-price">0.00</span></p>
+            </div>
+            <button id="limpar-carrinho" class="clear-button">Limpar Carrinho</button>
+            <button id="finalizar-compra" class="checkout-button" onclick="redirecionarParaPagamento()">Finalizar Compra</button>
         </div>
     </div>
 

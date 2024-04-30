@@ -2,95 +2,99 @@ body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    background-color: #f4f4f4;
+}
+
+h1 {
+    text-align: center;
+    margin-top: 20px;
+    color: #333;
 }
 
 .container {
-    max-width: 800px;
-    margin: 20px auto;
-    padding: 20px;
-    background-color: #f4f4f4;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #c9c9c9;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
-h1,
-h2 {
+button {
+    display: block;
+    width: 100%;
+    padding: 14px 24px;
+    margin-bottom: 10px;
+    color: #fff;
+    background-color: #4caf50;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button.add-to-cart{
+    margin-left: 10px;
+}
+
+.clear-button {
+    background-color: #e53935;
+}
+
+.checkout-button {
+    background-color: #1e88e5;
+}
+
+button:hover {
+    background-color: #3f943f;
+}
+
+.cart-title {
+    margin-top: 30px;
     color: #333;
+}
+
+.cart-list {
+    padding: 0;
+    list-style-type: none;
+}
+
+.cart-list li {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: #f9f9f9;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.cart-list li:last-child {
+    margin-bottom: 0;
+}
+
+.cart-summary {
+    margin-top: 30px;
+}
+
+.cart-summary p {
+    margin-bottom: 20px;
+}
+
+span {
+    font-weight: bold;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
 }
 
-th,
-td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-}
-
-th {
-    background-color: #f2f2f2;
-}
-
-.add-to-cart {
-    padding: 8px 12px;
-    background-color: #4caf50;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-}
-
-.add-to-cart:hover {
-    background-color: #45a049;
-}
-
-.cart-list {
-    list-style-type: none;
+table th,
+table td {
     padding: 0;
 }
 
-.total-price {
+table th {
     font-weight: bold;
-}
-
-/* Estilo para o botão de limpar carrinho */
-#limpar-carrinho {
-    padding: 8px 12px;
-    background-color: #f44336;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-top: 10px;
-}
-
-#limpar-carrinho:hover {
-    background-color: #d32f2f;
-}
-
-/* Estilo para o título do carrinho */
-h2.cart-title {
-    color: #333;
-    margin-top: 20px;
-}
-
-p {
-    margin: 6px;
-}
-
-#finalizar-compra {
-    background-color: #007bff;
-    color: #fff;
-    border: none;
-    border-radius: 4px;
-    padding: 8px 12px;
-    cursor: pointer;
-}
-
-#finalizar-compra:hover {
-    background-color: #0056b3;
 }

@@ -17,12 +17,12 @@ public class CarrinhoDeCompras {
         this.itens = new ArrayList<>();
     }
 
-    // tá sendo usada
+    // tá sendo usado
     public List<ItemDeCompra> getItens() {
         return itens;
     }
 
-    // tá sendo usada
+    // tá sendo usado
     public void adicionarItem(Produtos produto, int quantidade) {
         // Verifica se o produto é nulo
         if (produto == null) {
@@ -73,7 +73,7 @@ public class CarrinhoDeCompras {
                         ", Produto: " + item.getProduto().getNome() +
                         ", Quantidade: " + item.getQuantidade() +
                         ", Preço Unitário: R$" + df.format(item.getProduto().getPreco()) +
-                        ", Subtotal: R$" + df.format(item.getSubtotal()));
+                        ", Subtotal: R$" + df.format(item.getSubTotal()));
             }
             System.out.println("\nValor total dos produtos: " + "R$" + df.format(calcularTotal()));
         }
@@ -87,17 +87,27 @@ public class CarrinhoDeCompras {
         }
     }
 
-    // tá sendo usada
+    // tá sendo usado
     public double calcularTotal() {
-        double subtotal = this.itens.stream()
-                .mapToDouble(item -> item.getSubtotal())
-                .sum();
+        double subtotal = 0.0;
+        for (ItemDeCompra item : itens) {
+            subtotal += item.getProduto().getPreco() * item.getQuantidade();
+        }
         // Taxa de entrega
         double taxaEntrega = 7.0;
         return subtotal + taxaEntrega;
     }
 
-    // tá sendo usada
+    // tá sendo usado
+    public double calcularSubtotal(List<ItemDeCompra> itens) {
+        double subtotal = 0.0;
+        for (ItemDeCompra item : itens) {
+            subtotal += item.getSubTotal();
+        }
+        return subtotal;
+    }
+
+    // tá sendo usado
     public void limparCarrinho(){
         itens.clear();
     }

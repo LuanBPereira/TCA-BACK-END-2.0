@@ -24,8 +24,7 @@ public class ItemDeCompra {
         this.quantidade = quantidade;
     }
 
-    public double getSubtotal() {
+    public double getSubTotal(){
         return produto.getPreco() * quantidade;
     }
-
 }

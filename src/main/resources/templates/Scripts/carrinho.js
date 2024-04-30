@@ -1,16 +1,16 @@
-// Função para buscar e exibir os produtos
 function fetchProducts() {
     fetch('http://localhost:8080/produtos')
         .then(response => response.json())
         .then(produtos => {
             const productList = document.getElementById('product-list');
+            productList.innerHTML = ''; // Limpa a lista antes de adicionar os produtos
             produtos.forEach(produto => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${produto.codigoP}</td>
                     <td>${produto.nome}</td>
                     <td>R$ ${produto.preco.toFixed(2)}</td>
-                    <button class="add-to-cart" data-id="${produto.codigoP}" data-name="${produto.nome}" data-price="${produto.preco}">Adicionar ao Carrinho</button>
+                    <td><button class="add-to-cart" data-id="${produto.codigoP}" data-name="${produto.nome}" data-price="${produto.preco}">Adicionar ao Carrinho</button></td>
                 `;
                 productList.appendChild(row);
             });
@@ -20,7 +20,6 @@ function fetchProducts() {
         });
 }
 
-// Função para adicionar um item ao carrinho
 function adicionarItemCarrinho(id, nome, preco) {
     fetch('http://localhost:8080/carrinho/adicionar', {
         method: 'POST',
@@ -41,16 +40,14 @@ function adicionarItemCarrinho(id, nome, preco) {
                 throw new Error('Erro ao adicionar item ao carrinho');
             }
             console.log('Item adicionado ao carrinho com sucesso!');
-            // Atualizar a lista de itens do carrinho após adicionar ao carrinho
-            fetchCartItems();
-            // Chamar a função para buscar o valor total após adicionar um item ao carrinho
-            fetchTotalValue();
+            fetchCartItems(); // Atualiza a lista de itens no carrinho
+            fetchTotalValue(); // Atualiza o valor total
         })
         .catch(error => {
             console.error('Erro ao adicionar item ao carrinho:', error);
         });
 }
-// Evento de clique para adicionar um item ao carrinho
+
 document.addEventListener('click', function (event) {
     if (event.target.classList.contains('add-to-cart')) {
         const id = event.target.dataset.id;
@@ -88,6 +85,7 @@ function fetchCartItems() {
             console.error('Erro ao obter itens do carrinho:', error);
         });
 }
+
 function fetchTotalValue() {
     fetch('http://localhost:8080/carrinho/valorTotal', {
         method: 'POST',
@@ -112,7 +110,7 @@ function fetchTotalValue() {
             console.error('Erro ao calcular o valor total:', error);
         });
 }
-// Função para limpar o carrinho
+
 function limparCarrinho() {
     fetch('http://localhost:8080/carrinho/limpar', {
         method: 'POST',
@@ -125,10 +123,8 @@ function limparCarrinho() {
                 throw new Error('Erro ao limpar o carrinho');
             }
             console.log('Carrinho limpo com sucesso!');
-            // Atualizar a lista de itens do carrinho após limpar
-            fetchCartItems();
-            // Chamar a função para buscar o valor total após limpar o carrinho
-            fetchTotalValue();
+            fetchCartItems(); // Atualiza a lista de itens no carrinho
+            fetchTotalValue(); // Atualiza o valor total
         })
         .catch(error => {
             console.error('Erro ao limpar o carrinho:', error);
@@ -136,15 +132,12 @@ function limparCarrinho() {
 }
 
 function redirecionarParaPagamento() {
-    // Verificar se o carrinho está vazio antes de redirecionar para a página de pagamento
     fetch('http://localhost:8080/carrinho/listar')
         .then(response => response.json())
         .then(itens => {
             if (itens.length === 0) {
-                // Se o carrinho estiver vazio, exibir um alerta e não redirecionar
                 alert('Não é possível finalizar a compra: carrinho de compras vazio.');
             } else {
-                // Se o carrinho não estiver vazio, redirecionar para a página de pagamento
                 window.location.href = 'pagamento.html';
             }
         })
@@ -152,9 +145,9 @@ function redirecionarParaPagamento() {
             console.error('Erro ao obter itens do carrinho:', error);
         });
 }
-// Evento de clique para limpar o carrinho
+
 document.getElementById('limpar-carrinho').addEventListener('click', limparCarrinho);
-// Chamada da função para buscar os itens do carrinho ao carregar a página
+
 fetchTotalValue();
 fetchCartItems();
 fetchProducts();

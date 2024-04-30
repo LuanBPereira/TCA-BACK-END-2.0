@@ -1,5 +1,6 @@
 package br.com.kldoces.pacotes.utils;
 
+import br.com.kldoces.pacotes.services.CarrinhoDeCompras;
 import br.com.kldoces.pacotes.services.ItemDeCompra;
 
 import java.io.*;
@@ -11,6 +12,7 @@ import java.util.List;
 public class ManipuladorArquivos {
 
     public void escreverNoArquivo(double valorTotalProdutos, double taxaDeEntrega, double valorTotalCompra, int opcaoPagamento, List<ItemDeCompra> itens) {
+        CarrinhoDeCompras cc = new CarrinhoDeCompras();
         DecimalFormat df = new DecimalFormat("0.00");
         String dataHoraFormatada = getDataHoraFormatada();
         String formaPagamento = getFormaPagamento(opcaoPagamento);
@@ -25,7 +27,7 @@ public class ManipuladorArquivos {
                         ", Produto: " + item.getProduto().getNome() +
                         ", Quantidade: " + item.getQuantidade() +
                         ", Preço Unitário: R$" + df.format(item.getProduto().getPreco()) +
-                        ", Subtotal: R$" + df.format(item.getSubtotal()) + "\n");
+                        ", Subtotal: R$" + df.format(item.getSubTotal()) + "\n");
             }
 
             escritor.write("\nValor total dos produtos: R$" + df.format(valorTotalProdutos) + "\n");

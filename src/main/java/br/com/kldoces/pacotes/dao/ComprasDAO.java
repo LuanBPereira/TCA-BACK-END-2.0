@@ -1,6 +1,7 @@
 package br.com.kldoces.pacotes.dao;
 
 import br.com.kldoces.pacotes.connection.Conexao;
+import br.com.kldoces.pacotes.services.CarrinhoDeCompras;
 import br.com.kldoces.pacotes.services.ItemDeCompra;
 
 import java.sql.*;
@@ -55,6 +56,7 @@ public class ComprasDAO {
     }
 
     private void salvarItensCompra(Connection conn, int compraId, List<ItemDeCompra> itens) throws SQLException {
+        CarrinhoDeCompras cc = new CarrinhoDeCompras();
         String sqlItens = "INSERT INTO tb_itens_compra (compra_id, codigo_produto, nome_produto, quantidade, preco_unitario, subtotal) VALUES (?, ?, ?, ?, ?, ?)";
         try (PreparedStatement psItens = conn.prepareStatement(sqlItens)) {
             for (ItemDeCompra item : itens) {
@@ -63,7 +65,7 @@ public class ComprasDAO {
                 psItens.setString(3, item.getProduto().getNome());
                 psItens.setInt(4, item.getQuantidade());
                 psItens.setDouble(5, item.getProduto().getPreco());
-                psItens.setDouble(6, item.getSubtotal());
+                psItens.setDouble(6, cc.calcularSubtotal(itens) );
                 psItens.executeUpdate();
             }
         }
