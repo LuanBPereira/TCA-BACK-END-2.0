@@ -45,8 +45,7 @@ public class CarrinhoDeComprasController {
 
     @PostMapping("/valorSubTotal")
     public Map<String, Double> calculoSubtTotal() {
-        List<ItemDeCompra> itens = cc.getItens();
-        double valorSubTotal = cc.calcularSubtotal(itens);
+        double valorSubTotal = cc.calcularSubtotal();
         Map<String, Double> response = new HashMap<>();
         response.put("subTotal", valorSubTotal);
         return response;

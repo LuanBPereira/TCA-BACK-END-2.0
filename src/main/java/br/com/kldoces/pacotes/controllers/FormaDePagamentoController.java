@@ -7,6 +7,7 @@ import br.com.kldoces.pacotes.repositories.CompraRepository;
 import br.com.kldoces.pacotes.repositories.ItensCompraRepository;
 import br.com.kldoces.pacotes.services.CarrinhoDeCompras;
 import br.com.kldoces.pacotes.services.ItemDeCompra;
+import br.com.kldoces.pacotes.services.ItensComprados;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -25,36 +28,29 @@ public class FormaDePagamentoController {
     private CarrinhoDeCompras carrinhoDeCompras;
 
     @Autowired
+    private ItensComprados ic;
+
+    @Autowired
     private CompraRepository cr;
 
     @Autowired
     private ItensCompraRepository icr;
 
     @PostMapping("/{tipoPagamento}")
-    public ResponseEntity<String> realizarPagamento(@PathVariable("tipoPagamento") String tipoPagamento) {
+    public ResponseEntity<String>pagamento(@PathVariable("tipoPagamento") String tipoPagamento) {
         // verifica se o carrinho está vazio
         // caso esteja, não irá prosseguir com a função do pagamento
-        if (carrinhoDeCompras.getItens().isEmpty()) {
+        if (carrinhoDeCompras.isVazio()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível finalizar a compra: carrinho de compras vazio.");
         }
 
-        FormaDePagamento formaDePagamento = FormaDePagamento.valueOf(tipoPagamento.toUpperCase());
-        FormaDePagamento.realizarPagamento(formaDePagamento);
+        realizarPagamento(tipoPagamento);
 
-        Compra compra = new Compra();
-        List<ItemDeCompra> itensCompra = carrinhoDeCompras.getItens();
-
+        Compra compra = new Compra(tipoPagamento, carrinhoDeCompras);
         Compra compraSalva = cr.save(compra);
 
-        for (ItemDeCompra item : itensCompra) {
-            ItensCompra itemCompra = new ItensCompra();
-            itemCompra.setCompraId(compraSalva);
-            itemCompra.setCodigoProduto(item.getProduto().getCodigoP());
-            itemCompra.setNomeProduto(item.getProduto().getNome());
-            itemCompra.setQuantidade(item.getQuantidade());
-            itemCompra.setPrecoUnitario(item.getProduto().getPreco());
-            itemCompra.setSubTotal(item.getSubTotal());
-
+        for (ItemDeCompra item : carrinhoDeCompras.getItens()) {
+            ItensCompra itemCompra = ic.criarItemCompra(compraSalva, item);
             icr.save(itemCompra);
         }
 
@@ -63,5 +59,12 @@ public class FormaDePagamentoController {
 
         return ResponseEntity.ok("Pagamento realizado com sucesso!");
     }
+
+    private void realizarPagamento(String tipoPagamento) {
+        FormaDePagamento formaDePagamento = FormaDePagamento.valueOf(tipoPagamento.toUpperCase());
+        FormaDePagamento.realizarPagamento(formaDePagamento);
+    }
+
+
 
 }

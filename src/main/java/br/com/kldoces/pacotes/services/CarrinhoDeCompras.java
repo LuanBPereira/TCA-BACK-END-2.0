@@ -1,6 +1,5 @@
 package br.com.kldoces.pacotes.services;
 
-import br.com.kldoces.pacotes.dao.ProdutosDAO;
 import br.com.kldoces.pacotes.models.Produtos;
 import org.springframework.stereotype.Service;
 
@@ -62,31 +61,6 @@ public class CarrinhoDeCompras {
         System.out.println("Produto não encontrado no carrinho.");
     }
 
-    public void  listarProdutosAdicionados() {
-        // Verifica se há produtos no carrinho de compras
-        if (itens.isEmpty()) {
-            System.out.println("O carrinho de compras está vazio.");
-        } else {
-            System.out.println("Produtos no Carrinho de Compras:");
-            for (ItemDeCompra item : itens) {
-                System.out.println("Codigo Produto: " + item.getProduto().getCodigoP() +
-                        ", Produto: " + item.getProduto().getNome() +
-                        ", Quantidade: " + item.getQuantidade() +
-                        ", Preço Unitário: R$" + df.format(item.getProduto().getPreco()) +
-                        ", Subtotal: R$" + df.format(item.getSubTotal()));
-            }
-            System.out.println("\nValor total dos produtos: " + "R$" + df.format(calcularTotal()));
-        }
-    }
-
-    public void listarProdutos() {
-        ProdutosDAO produtosDAO = new ProdutosDAO();
-        List<Produtos> produtos = produtosDAO.listar();
-        for (Produtos produto : produtos) {
-            System.out.println("Código: " + produto.getCodigoP() + " - " + produto.getNome() + " - R$" + df.format(produto.getPreco()));
-        }
-    }
-
     // tá sendo usado
     public double calcularTotal() {
         double subtotal = 0.0;
@@ -99,12 +73,18 @@ public class CarrinhoDeCompras {
     }
 
     // tá sendo usado
-    public double calcularSubtotal(List<ItemDeCompra> itens) {
+    public double calcularSubtotal() {
+        List<ItemDeCompra> itens = getItens();
         double subtotal = 0.0;
         for (ItemDeCompra item : itens) {
             subtotal += item.getSubTotal();
         }
         return subtotal;
+    }
+
+    // tá sendo usado
+    public boolean isVazio() {
+        return itens.isEmpty();
     }
 
     // tá sendo usado
