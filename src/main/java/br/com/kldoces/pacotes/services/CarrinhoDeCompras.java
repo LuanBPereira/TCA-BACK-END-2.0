@@ -40,24 +40,30 @@ public class CarrinhoDeCompras {
         itens.add(new ItemDeCompra(produto, quantidade));
     }
 
-    public void removerItem(int codigoProduto, int quantidade) {
+    public void incrementarItem(int codigoProduto) {
         for (ItemDeCompra item : itens) {
             if (item.getProduto().getCodigoP() == codigoProduto) {
-                int quantidadeAtual = item.getQuantidade();
-                if (quantidade > quantidadeAtual) {
-                    System.out.println("Não é possível remover mais itens do que você tem.");
-                    return;
-                } else if (quantidadeAtual == quantidade) {
-                    itens.remove(item);
-                    System.out.println("Produto: " + item.getProduto().getNome() + " removido com sucesso!");
+                item.setQuantidade(item.getQuantidade() + 1);
+                System.out.println("Quantidade do produto " + item.getProduto().getNome() + " incrementada.");
+                return;
+            }
+        }
+        System.out.println("Produto não encontrado no carrinho.");
+    }
+
+    public void decrementarItem(int codigoProduto) {
+        for (ItemDeCompra item : itens) {
+            if (item.getProduto().getCodigoP() == codigoProduto) {
+                if (item.getQuantidade() > 1) {
+                    item.setQuantidade(item.getQuantidade() - 1);
+                    System.out.println("Quantidade do produto " + item.getProduto().getNome() + " decrementada.");
                 } else {
-                    item.setQuantidade(quantidadeAtual - quantidade);
-                    System.out.println("Quantidade removida: " + quantidade + " do produto: " + item.getProduto().getNome());
+                    itens.remove(item);
+                    System.out.println("Produto " + item.getProduto().getNome() + " removido do carrinho.");
                 }
                 return;
             }
         }
-        // Se o item não for encontrado, exibe uma mensagem
         System.out.println("Produto não encontrado no carrinho.");
     }
 

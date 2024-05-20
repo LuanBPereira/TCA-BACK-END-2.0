@@ -59,4 +59,14 @@ public class CarrinhoDeComprasController {
         return response;
     }
 
+    @PutMapping("/incrementar/{codigoProduto}")
+    public void incrementarItem(@PathVariable int codigoProduto) {
+        cc.incrementarItem(codigoProduto);
+    }
+
+    @PutMapping("/decrementar/{codigoProduto}")
+    public void decrementarItem(@PathVariable int codigoProduto) {
+        cc.decrementarItem(codigoProduto);
+    }
+
 }

@@ -1,3 +1,30 @@
+document.addEventListener('DOMContentLoaded', () => {
+    fetchProducts();
+
+    document.addEventListener('click', function (event) {
+        if (event.target.classList.contains('add-to-cart')) {
+            const id = event.target.dataset.id;
+            const nome = event.target.dataset.name;
+            const preco = event.target.dataset.price;
+            openAddCartModal(id, nome, preco);
+        } else if (event.target.classList.contains('increment')) {
+            const id = event.target.dataset.id;
+            changeQuantity(id, 1);
+        } else if (event.target.classList.contains('decrement')) {
+            const id = event.target.dataset.id;
+            changeQuantity(id, -1);
+        }
+    });
+
+    document.getElementById('close-modal').addEventListener('click', closeAddCartModal);
+    document.getElementById('increment-modal').addEventListener('click', () => changeModalQuantity(1));
+    document.getElementById('decrement-modal').addEventListener('click', () => changeModalQuantity(-1));
+    document.getElementById('confirm-add-cart').addEventListener('click', confirmAddCart);
+
+    fetchTotalValue();
+    fetchCartItems();
+});
+
 function fetchProducts() {
     fetch('http://localhost:8080/produtos')
         .then(response => response.json())
@@ -20,7 +47,35 @@ function fetchProducts() {
         });
 }
 
-function adicionarItemCarrinho(id, nome, preco) {
+function openAddCartModal(id, nome, preco) {
+    const modal = document.getElementById('add-cart-modal');
+    modal.dataset.id = id;
+    modal.dataset.nome = nome;
+    modal.dataset.preco = preco;
+    document.getElementById('modal-product-name').textContent = nome;
+    document.getElementById('modal-product-quantity').textContent = 1;
+    modal.style.display = 'block';
+}
+
+function closeAddCartModal() {
+    const modal = document.getElementById('add-cart-modal');
+    modal.style.display = 'none';
+}
+
+function changeModalQuantity(delta) {
+    const quantityElement = document.getElementById('modal-product-quantity');
+    let quantity = parseInt(quantityElement.textContent);
+    quantity = Math.max(1, quantity + delta);
+    quantityElement.textContent = quantity;
+}
+
+function confirmAddCart() {
+    const modal = document.getElementById('add-cart-modal');
+    const id = modal.dataset.id;
+    const nome = modal.dataset.nome;
+    const preco = modal.dataset.preco;
+    const quantidade = parseInt(document.getElementById('modal-product-quantity').textContent);
+
     fetch('http://localhost:8080/carrinho/adicionar', {
         method: 'POST',
         headers: {
@@ -32,7 +87,7 @@ function adicionarItemCarrinho(id, nome, preco) {
                 nome: nome,
                 preco: preco
             },
-            quantidade: 1
+            quantidade: quantidade
         })
     })
         .then(response => {
@@ -40,6 +95,7 @@ function adicionarItemCarrinho(id, nome, preco) {
                 throw new Error('Erro ao adicionar item ao carrinho');
             }
             console.log('Item adicionado ao carrinho com sucesso!');
+            closeAddCartModal();
             fetchCartItems(); // Atualiza a lista de itens no carrinho
             fetchTotalValue(); // Atualiza o valor total
         })
@@ -47,15 +103,6 @@ function adicionarItemCarrinho(id, nome, preco) {
             console.error('Erro ao adicionar item ao carrinho:', error);
         });
 }
-
-document.addEventListener('click', function (event) {
-    if (event.target.classList.contains('add-to-cart')) {
-        const id = event.target.dataset.id;
-        const nome = event.target.dataset.name;
-        const preco = event.target.dataset.price;
-        adicionarItemCarrinho(id, nome, preco);
-    }
-});
 
 function fetchCartItems() {
     fetch('http://localhost:8080/carrinho/listar')
@@ -69,7 +116,11 @@ function fetchCartItems() {
             let subtotal = 0;
             itens.forEach(item => {
                 const listItem = document.createElement('li');
-                listItem.textContent = `${item.produto.nome} - Quantidade: ${item.quantidade}`;
+                listItem.innerHTML = `
+                    ${item.produto.nome} - Quantidade: <span id="quantity-${item.produto.codigoP}">${item.quantidade}</span>
+                    <button class="decrement" data-id="${item.produto.codigoP}">-</button>
+                    <button class="increment" data-id="${item.produto.codigoP}">+</button>
+                `;
                 cartList.appendChild(listItem);
                 subtotal += item.produto.preco * item.quantidade;
             });
@@ -146,8 +197,16 @@ function redirecionarParaPagamento() {
         });
 }
 
-document.getElementById('limpar-carrinho').addEventListener('click', limparCarrinho);
+function changeQuantity(codigoProduto, delta) {
+    const url = delta > 0 ? `http://localhost:8080/carrinho/incrementar/${codigoProduto}` : `http://localhost:8080/carrinho/decrementar/${codigoProduto}`;
+    fetch(url, { method: 'PUT' })
+        .then(() => {
+            fetchCartItems();
+            fetchTotalValue();
+        })
+        .catch(error => {
+            console.error('Erro ao atualizar quantidade:', error);
+        });
+}
 
-fetchTotalValue();
-fetchCartItems();
-fetchProducts();
+document.getElementById('limpar-carrinho').addEventListener('click', limparCarrinho);

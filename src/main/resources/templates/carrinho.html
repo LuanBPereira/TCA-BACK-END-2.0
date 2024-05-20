@@ -17,6 +17,7 @@
                     <th>Código</th>
                     <th>Nome</th>
                     <th>Preço</th>
+                    <th>Ação</th>
                 </tr>
             </thead>
             <tbody id="product-list">
@@ -30,12 +31,24 @@
                 <!-- O carrinho de compras será exibido aqui -->
             </ul>
             <div class="cart-summary">
-                <p>Subtotal: <span id="subtotal"></span></p>
-                <p>Taxa de Entrega: <span id="delivery-fee"></span></p>
+                <p>Subtotal: <span id="subtotal">0.00</span></p>
+                <p>Taxa de Entrega: <span id="delivery-fee">7.00</span></p>
                 <p>Total: <span id="total-price">0.00</span></p>
             </div>
             <button id="limpar-carrinho" class="clear-button">Limpar Carrinho</button>
             <button id="finalizar-compra" class="checkout-button" onclick="redirecionarParaPagamento()">Finalizar Compra</button>
+        </div>
+    </div>
+
+    <!-- Modal para adicionar itens ao carrinho -->
+    <div id="add-cart-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" id="close-modal">&times;</span>
+            <h2 id="modal-product-name"></h2>
+            <p>Quantidade: <span id="modal-product-quantity">1</span></p>
+            <button id="decrement-modal">-</button>
+            <button id="increment-modal">+</button>
+            <button id="confirm-add-cart">Adicionar ao Carrinho</button>
         </div>
     </div>
 
