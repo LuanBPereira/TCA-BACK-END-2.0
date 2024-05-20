@@ -40,6 +40,7 @@ public class CarrinhoDeCompras {
         itens.add(new ItemDeCompra(produto, quantidade));
     }
 
+    // tá sendo usado
     public void incrementarItem(int codigoProduto) {
         for (ItemDeCompra item : itens) {
             if (item.getProduto().getCodigoP() == codigoProduto) {
@@ -51,6 +52,7 @@ public class CarrinhoDeCompras {
         System.out.println("Produto não encontrado no carrinho.");
     }
 
+    // tá sendo usado
     public void decrementarItem(int codigoProduto) {
         for (ItemDeCompra item : itens) {
             if (item.getProduto().getCodigoP() == codigoProduto) {
