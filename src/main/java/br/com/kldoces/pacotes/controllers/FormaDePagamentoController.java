@@ -16,10 +16,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
 @RestController
 @RequestMapping("pagamento")
 public class FormaDePagamentoController {
@@ -64,7 +60,5 @@ public class FormaDePagamentoController {
         FormaDePagamento formaDePagamento = FormaDePagamento.valueOf(tipoPagamento.toUpperCase());
         FormaDePagamento.realizarPagamento(formaDePagamento);
     }
-
-
 
 }
