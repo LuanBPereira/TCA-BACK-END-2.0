@@ -49,7 +49,6 @@ public class CarrinhoDeCompras {
                 return;
             }
         }
-        System.out.println("Produto não encontrado no carrinho.");
     }
 
     // tá sendo usado
@@ -66,7 +65,6 @@ public class CarrinhoDeCompras {
                 return;
             }
         }
-        System.out.println("Produto não encontrado no carrinho.");
     }
 
     // tá sendo usado
