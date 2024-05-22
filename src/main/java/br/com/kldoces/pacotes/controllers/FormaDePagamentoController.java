@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FormaDePagamentoController {
 
     @Autowired
-    private CarrinhoDeCompras carrinhoDeCompras;
+    private CarrinhoDeCompras cc;
 
     @Autowired
     private ItensComprados ic;
@@ -36,22 +36,21 @@ public class FormaDePagamentoController {
     public ResponseEntity<String>pagamento(@PathVariable("tipoPagamento") String tipoPagamento) {
         // verifica se o carrinho está vazio
         // caso esteja, não irá prosseguir com a função do pagamento
-        if (carrinhoDeCompras.isVazio()) {
+        if (cc.isVazio()) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Não é possível finalizar a compra: carrinho de compras vazio.");
         }
 
         realizarPagamento(tipoPagamento);
 
-        Compra compra = new Compra(tipoPagamento, carrinhoDeCompras);
+        Compra compra = new Compra(tipoPagamento, cc);
         Compra compraSalva = cr.save(compra);
 
-        for (ItemDeCompra item : carrinhoDeCompras.getItens()) {
+        for (ItemDeCompra item : cc.getItens()) {
             ItensCompra itemCompra = ic.criarItemCompra(compraSalva, item);
             icr.save(itemCompra);
         }
 
-        // Limpar o carrinho após o pagamento ser realizado com sucesso
-        carrinhoDeCompras.limparCarrinho();
+        cc.limparCarrinho();
 
         return ResponseEntity.ok("Pagamento realizado com sucesso!");
     }
