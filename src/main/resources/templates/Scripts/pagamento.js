@@ -1,4 +1,4 @@
-function realizarPagamento(formaDePagamento) {
+function makePayment(formaDePagamento) {
     fetch(`http://localhost:8080/pagamento/${formaDePagamento}`, {
         method: 'POST',
         headers: {

@@ -16,12 +16,11 @@ public class CarrinhoDeCompras {
         this.itens = new ArrayList<>();
     }
 
-    // tá sendo usado
+
     public List<ItemDeCompra> getItens() {
         return itens;
     }
 
-    // tá sendo usado
     public void adicionarItem(Produtos produto, int quantidade) {
         // Verifica se o produto é nulo
         if (produto == null) {
@@ -40,7 +39,6 @@ public class CarrinhoDeCompras {
         itens.add(new ItemDeCompra(produto, quantidade));
     }
 
-    // tá sendo usado
     public void incrementarItem(int codigoProduto) {
         for (ItemDeCompra item : itens) {
             if (item.getProduto().getCodigoP() == codigoProduto) {
@@ -51,7 +49,6 @@ public class CarrinhoDeCompras {
         }
     }
 
-    // tá sendo usado
     public void decrementarItem(int codigoProduto) {
         for (ItemDeCompra item : itens) {
             if (item.getProduto().getCodigoP() == codigoProduto) {
@@ -67,7 +64,6 @@ public class CarrinhoDeCompras {
         }
     }
 
-    // tá sendo usado
     public double calcularTotal() {
         double subtotal = 0.0;
         for (ItemDeCompra item : itens) {
@@ -78,7 +74,6 @@ public class CarrinhoDeCompras {
         return subtotal + taxaEntrega;
     }
 
-    // tá sendo usado
     public double calcularSubtotal() {
         List<ItemDeCompra> itens = getItens();
         double subtotal = 0.0;
@@ -88,12 +83,10 @@ public class CarrinhoDeCompras {
         return subtotal;
     }
 
-    // tá sendo usado
     public boolean isVazio() {
         return itens.isEmpty();
     }
 
-    // tá sendo usado
     public void limparCarrinho(){
         itens.clear();
     }

@@ -23,7 +23,6 @@ public class ItensCompra implements Serializable {
     @ManyToOne
     @JoinColumn(name = "compra_id", referencedColumnName = "id")
     private Compra compraId;
-
     private int codigoProduto;
     private String nomeProduto;
     private int quantidade;

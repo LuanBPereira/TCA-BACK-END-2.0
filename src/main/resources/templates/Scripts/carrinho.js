@@ -162,7 +162,7 @@ function fetchTotalValue() {
         });
 }
 
-function limparCarrinho() {
+function cleanCart() {
     fetch('http://localhost:8080/carrinho/limpar', {
         method: 'POST',
         headers: {
@@ -182,7 +182,7 @@ function limparCarrinho() {
         });
 }
 
-function redirecionarParaPagamento() {
+function redirectToPayment() {
     fetch('http://localhost:8080/carrinho/listar')
         .then(response => response.json())
         .then(itens => {
@@ -209,4 +209,4 @@ function changeQuantity(codigoProduto, delta) {
         });
 }
 
-document.getElementById('limpar-carrinho').addEventListener('click', limparCarrinho);
+document.getElementById('limpar-carrinho').addEventListener('click', cleanCart);
